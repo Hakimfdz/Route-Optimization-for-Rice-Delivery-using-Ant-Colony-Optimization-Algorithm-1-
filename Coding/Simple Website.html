@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Prototype of Route Optimization for Rice Delivery using Ant Colony Optimization Algorithm</title>
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+    #map {
+      height: 100%;
+    }
+    /* Optional: Makes the sample page fill the window. */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    #floating-panel {
+      position: absolute;
+      top: 10px;
+      left: 25%;
+      z-index: 5;
+      background-color: #fff;
+      padding: 5px;
+      border: 1px solid #999;
+      text-align: center;
+      font-family: 'Roboto','sans-serif';
+      line-height: 30px;
+      padding-left: 10px;
+    }
+  </style>
+  
+  
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7hejj2U87qNPZfqznUMONNtZMQ05FCns"></script>
+  <script>
+    function initMap() {
+      var directionsService = new google.maps.DirectionsService;
+      var directionsDisplay = new google.maps.DirectionsRenderer;
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        center: {lat: 3.0742500766712384, lng: 101.49239486900824}
+      });
+      directionsDisplay.setMap(map);
+
+      var onChangeHandler = function() {
+        calculateAndDisplayRoute(directionsService, directionsDisplay);
+      };
+      document.getElementById('start').addEventListener('change', onChangeHandler);
+      document.getElementById('end').addEventListener('change', onChangeHandler);
+    }
+
+    function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+      directionsService.route({
+        origin: document.getElementById('start').value,
+        destination: document.getElementById('end').value,
+        travelMode: 'DRIVING'
+      }, function(response, status) {
+        if (status === 'OK') {
+          directionsDisplay.setDirections(response);
+        } else {
+          window.alert('Directions request failed due to ' + status);
+        }
+      });
+    }
+  </script>
+</head>
+
+<body onload="initMap()">
+  <div id="map" style="height: 500px; width: 100%;"></div>
+  <input type="text"> <!--//https://stackoverflow.com/questions/56387831/how-to-print-html-geolocation-->
+    <button onclick="getLocation()">GPS Track</button>
+    <p id="demo"></p>
+    <script>
+    var x = document.getElementById("demo");
+    console.log(x);
+       function getLocation() {
+         if (navigator.geolocation) {
+           navigator.geolocation.getCurrentPosition(showPosition);
+         } else {
+           x.innerHTML = "Geolocation is not supported by this browser.";
+         }
+       }
+
+       function showPosition(position) {
+         x.innerHTML = "Latitude: " + position.coords.latitude +
+         "<br>Longitude: " + position.coords.longitude;
+       }
+       </script>
+
+<div id="floating-panel">
+  <b>Start: </b>
+  <select id="start">
+    <option value="25, Jalan Kristal 7/72, Seksyen 7, 40000 Shah Alam">R1</option>
+    <option value="Jalan Platinum 7/37, Seksyen 7, 40000 Shah Alam, Selangor">B</option>
+    <option value="1, Jalan Turmalin 7/12, Seksyen 7, 40000 Shah Alam, Selangor">R2</option>
+  </select>
+  <b>End: </b>
+  <select id="end">
+    <option value="32, Jalan Kristal J7/J, Seksyen 7, 40000 Shah Alam, Selangor ">D1</option>
+    <option value="No: QG 43 & QG 45, Jalan Plumbum U 7/U, Seksyen 7, 40000 Shah Alam, Selangor">D2</option>
+    <option value="22, Jalan Zirkon E7/E, Seksyen 7, 40000 Shah Alam, Selangor">D3</option>
+  </select>
+</div>
+
+
+<script>
+  var best_distance_aco = 2295.084
+function showACO(position) {
+  x.innerHTML = "Distance: " + best_distance_aco + "Metre";
+}
+</script>
+<button type="button" onclick="showACO()">Result</button>
+
+<div>
+<b><p>PARAMETER TUNING</p></b>
+<label for="dropdown2">Number of Epoch:</label>
+<select id="dropdown2" name="Number of Epoch">
+  <option epoch_value="option1">10</option>
+  <option epoch_value="option2">20</option>
+  <option epoch_value="option3">30</option>
+</select>
+<br>
+<label for="dropdown1">Number of artificial ants:</label>
+<select id="dropdown1" name="Number of artificial ants">
+  <option ant_value="option1">10</option>
+  <option ant_value="option2">50</option>
+  <option ant_value="option3">100</option>
+</select>
+<br>
+<label for="dropdown2">Number of Iteration:</label>
+<select id="dropdown2" name="Number of Iteration">
+  <option iteration_value="option1">1</option>
+  <option iteration_value="option2">2</option>
+  <option iteration_value="option3">3</option>
+  <option iteration_value="option3">4</option>
+  <option iteration_value="option3">5</option>
+  <option iteration_value="option3">6</option>
+  <option iteration_value="option3">7</option>
+  <option iteration_value="option3">8</option>
+  <option iteration_value="option3">9</option>
+  <option iteration_value="option3">10</option>
+</select>
+<br>
+<label for="dropdown2">Alpha Rate:</label>
+<select id="dropdown3" name="Alpha Rate">
+  <option alpha_value="option1">0.3</option>
+  <option alpha_value="option2">0.7</option>
+  <option alpha_value="option3">1.2</option>
+</select>
+<br>
+<label for="dropdown2">Beta Rate:</label>
+<select id="dropdown3" name="Beta Rate">
+  <option alpha_value="option1">0.3</option>
+  <option alpha_value="option2">0.7</option>
+  <option alpha_value="option3">1.2</option>
+</select>
+<br>
+<label for="dropdown2">Evaporation Rate:</label>
+<select id="dropdown3" name="Evaporation Rate">
+  <option er_value="option1">0.01</option>
+  <option er_value="option2">0.3</option>
+  <option er_value="option3">0.7</option>
+  <option er_value="option3">0.9</option>
+</select>
+<label for="dropdown2">Q:</label>
+<select id="dropdown3" name="Q">
+  <option value="option1">0.01</option>
+  <option value="option2">0.3</option>
+  <option value="option3">0.7</option>
+  <option value="option3">0.9</option>
+</select>
+</div>
+
+       
+</body>
+</html>

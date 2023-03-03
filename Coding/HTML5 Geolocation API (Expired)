@@ -1,0 +1,17 @@
+<script>
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      console.log("Geolocation is not supported by this browser.")
+    }
+  }
+
+  function showPosition(position) {
+    var lat = position.coords.latitude;
+    var lng = position.coords.longitude;
+    origin = lat + "," + lng;
+    //pass the origin to your request to the google maps API
+  }
+  getLocation();
+</script>

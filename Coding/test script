@@ -1,0 +1,16 @@
+import requests
+
+api_key = "your_api_key"
+origin = "3.070830, 101.506453"
+destination = "3.074139, 101.510770"
+routes =[]
+
+url = "https://maps.googleapis.com/maps/api/directions/json?origin={}&destination={}&key={}".format(origin, destination, api_key)
+
+response = requests.get(url)
+route = response.json()
+routes.append(route)
+
+for route in routes:
+    print(route)
+

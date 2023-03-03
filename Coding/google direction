@@ -1,0 +1,19 @@
+import requests
+
+api_key = 'AIzaSyDOppyOpwJ22lnWcWR_85u2YpfGTpgWD-I'
+locations = ["Seksyen 7, Shah Alam", "Location 2", "Location 3", "Location 4"]
+routes = []
+
+for i in range(len(locations)):
+    for j in range(i+1, len(locations)):
+        origin = locations[i]
+        destination = locations[j]
+
+        url = "https://maps.googleapis.com/maps/api/directions/json?origin={}&destination={}&key={}".format(origin, destination, api_key)
+
+        response = requests.get(url)
+        route = response.json()
+        routes.append(route)
+
+for route in routes:
+    print(route)

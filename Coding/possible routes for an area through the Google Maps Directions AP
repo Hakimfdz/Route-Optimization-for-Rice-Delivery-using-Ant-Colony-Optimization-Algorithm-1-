@@ -1,0 +1,31 @@
+import requests
+import googlemaps
+
+# Replace YOUR_API_KEY with your Google Maps API key
+api_key = 'AIzaSyC7hejj2U87qNPZfqznUMONNtZMQ05FCns'
+
+# Read the list of origins and destinations from a file or database
+with open("origins.txt", "r") as origins_file:
+    origins = origins_file.readlines()
+
+with open("destinations.txt", "r") as destinations_file:
+    destinations = destinations_file.readlines()
+
+# Loop through each origin
+for origin in origins:
+    # Loop through each destination
+    for destination in destinations:
+        # Make a request to the Google Maps Directions API
+        url = f"https://maps.googleapis.com/maps/api/directions/json?origin={origin}&destination={destination}&key={api_key}"
+        response = requests.get(url)
+        data = response.json()
+
+        # Extract the route information from the response
+        routes = data["routes"]
+        for route in routes:
+            print("Route:")
+            print("Distance:", route["legs"][0]["distance"]["text"])
+            print("Duration:", route["legs"][0]["duration"]["text"])
+            print("Steps:")
+            for step in route["legs"][0]["steps"]:
+                print("  ", step["html_instructions"])
